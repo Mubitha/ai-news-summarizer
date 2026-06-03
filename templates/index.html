@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Summarizer // Deep Intelligence Engine</title>
+    <!-- Tailwind CSS v4 -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+        }
+        .font-tech {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        /* 🌌 பேக்ரவுண்ட்ல மெதுவா நகரும் மேட்ரிக்ஸ் அனிமேஷன் */
+        @keyframes floatStream {
+            0% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) translateX(10px) rotate(3deg); }
+            100% { transform: translateY(0px) translateX(0px) rotate(0deg); }
+        }
+        .bg-stream-1 {
+            animation: floatStream 12s infinite ease-in-out;
+        }
+        .bg-stream-2 {
+            animation: floatStream 16s infinite ease-in-out;
+            animation-delay: -4s;
+        }
+
+        /* 💎 கிளாஸி கார்டு எஃபெக்ட்ஸ் */
+        .glass-card {
+            background: rgba(17, 24, 39, 0.45);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body class="text-gray-200 min-h-screen antialiased overflow-x-hidden selection:bg-white/10 selection:text-white">
+
+    <!-- 🔮 BACKGROUND ANIMATION LAYER (நகரும் வார்த்தைகள் & புகையுருவங்கள்) -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0 z-[-1]">
+        <!-- Moving Ambient Blurs -->
+        <div class="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-indigo-900/10 blur-[130px] bg-stream-1"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-900/10 blur-[120px] bg-stream-2"></div>
+        
+        <!-- Background Tech Wording Streams (நகரும் பின்னணி சொற்கள்) -->
+        <div class="absolute top-[15%] left-[5%] font-tech text-[10vw] font-bold text-white/[0.01] uppercase tracking-widest select-none bg-stream-1">
+            NLP_DATA
+        </div>
+        <div class="absolute bottom-[20%] right-[5%] font-tech text-[8vw] font-bold text-white/[0.01] uppercase tracking-widest select-none bg-stream-2">
+            LLAMA_3.3
+        </div>
+        <div class="absolute top-[60%] left-[40%] font-tech text-[4vw] font-bold text-white/[0.006] uppercase tracking-widest select-none bg-stream-1">
+            DEEP_LEARNING
+        </div>
+    </div>
+
+    <!-- Main View Wrapper -->
+    <div class="max-w-4xl mx-auto px-4 py-12 md:py-24 relative z-10">
+        
+        <!-- Premium Minimalist Header -->
+        <header class="mb-16 relative">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-gray-400 text-[10px] font-tech tracking-widest uppercase mb-4">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span> Neural Engine Active
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight font-tech text-white mb-4">
+                AI NEWS <span class="bg-gradient-to-r from-gray-400 via-white to-gray-500 bg-clip-text text-transparent">SUMMARIZER</span>
+            </h1>
+            <p class="text-gray-400 text-sm md:text-base max-w-xl leading-relaxed font-light">
+                A highly refined text intelligence system. Paste global articles for instantaneous contextual mapping, semantic analytics, and multi-language breakdown.
+            </p>
+        </header>
+
+        <!-- Application Core -->
+        <main class="space-y-10">
+            
+            <!-- Input Console -->
+            <div class="glass-card rounded-2xl p-5 md:p-8 transition-all duration-300">
+                <div class="flex items-center justify-between mb-3 text-[11px] font-tech tracking-wider text-gray-500">
+                    <span class="uppercase flex items-center gap-2"><i class="fa-solid fa-terminal text-indigo-400"></i> Raw Text Ingestion</span>
+                    <span class="text-gray-400">ENG // தமிழ் // हिंदी // മലയാളി // ಕನ್ನಡ</span>
+                </div>
+                
+                <textarea id="articleText" rows="6" 
+                    class="w-full bg-black/20 border border-white/5 rounded-xl p-4 text-sm md:text-base text-gray-100 placeholder-gray-600 focus:outline-none focus:border-white/20 transition-all duration-300 resize-none leading-relaxed"
+                    placeholder="Drop your article stream here... Requires a minimum of 100 tokens."></textarea>
+                
+                <button id="summarizeBtn" onclick="handleSummarize()"
+                    class="w-full mt-5 bg-white hover:bg-gray-200 text-black font-bold font-tech text-xs uppercase tracking-widest py-4 px-6 rounded-xl transition-all duration-300 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer shadow-[0_10px_30px_rgba(255,255,255,0.03)]">
+                    Analyze Core Matrix <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </button>
+            </div>
+
+            <!-- Terminal Decryptor Loading -->
+            <div id="loading" class="hidden text-center py-16 glass-card rounded-2xl border border-indigo-500/10">
+                <div class="relative inline-flex items-center justify-center mb-3">
+                    <div class="w-6 h-6 rounded-full border-2 border-white/10 border-t-white animate-spin"></div>
+                </div>
+                <p class="text-gray-400 text-xs font-tech tracking-widest uppercase animate-pulse">Deconstructing semantics via Llama-Node...</p>
+            </div>
+
+            <!-- Intelligence Analytics Dashboard (Hidden until trigger) -->
+            <div id="output" class="hidden space-y-8">
+                
+                <!-- Metadata Telemetry Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div class="glass-card rounded-xl p-4">
+                        <span class="block text-[10px] font-tech text-gray-500 uppercase tracking-wider mb-1">Category</span>
+                        <span id="badgeCategory" class="text-sm font-bold text-white font-tech">-</span>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <span class="block text-[10px] font-tech text-gray-500 uppercase tracking-wider mb-1">Sentiment</span>
+                        <span id="badgeSentiment" class="text-sm font-bold font-tech">-</span>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <span class="block text-[10px] font-tech text-gray-500 uppercase tracking-wider mb-1">Priority</span>
+                        <span id="badgeImportance" class="text-sm font-bold font-tech">-</span>
+                    </div>
+                    <div class="glass-card rounded-xl p-4">
+                        <span class="block text-[10px] font-tech text-gray-500 uppercase tracking-wider mb-1">Telemetry Time</span>
+                        <span id="badgeReadingTime" class="text-sm font-bold text-white font-tech">-</span>
+                    </div>
+                </div>
+
+                <!-- Primary Text Output Node -->
+                <div class="glass-card rounded-2xl p-6 md:p-8 space-y-6 relative overflow-hidden">
+                    
+                    <div class="flex items-start justify-between gap-6">
+                        <h2 id="outHeadline" class="text-xl md:text-2xl font-bold font-tech text-white tracking-tight leading-snug">
+                            Headline placeholder text
+                        </h2>
+                        <button onclick="copyBrief()" class="text-gray-400 hover:text-white p-3 rounded-xl bg-white/[0.02] border border-white/5 cursor-pointer transition-all hover:scale-105 active:scale-95 flex-shrink-0" title="Extract Intelligence Copy">
+                            <i id="copyIcon" class="fa-regular fa-copy text-xs"></i>
+                        </button>
+                    </div>
+
+                    <div class="h-[1px] bg-white/5"></div>
+
+                    <!-- Executive Summary Section -->
+                    <div class="space-y-2">
+                        <h3 class="text-[10px] font-tech uppercase tracking-widest text-indigo-400">01 // Executive Briefing</h3>
+                        <p id="outSummary" class="text-gray-300 text-sm md:text-base leading-relaxed pl-4 border-l-2 border-white/10">
+                            Summary text goes here...
+                        </p>
+                    </div>
+
+                    <div class="h-[1px] bg-white/5"></div>
+
+                    <!-- Key Bullet Telemetry -->
+                    <div class="space-y-3">
+                        <h3 class="text-[10px] font-tech uppercase tracking-widest text-indigo-400">02 // Key Data Extracts</h3>
+                        <ul id="outKeyPoints" class="space-y-3 text-sm text-gray-300 pl-1">
+                            <!-- Injected dynamically -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 5W Cognitive Graph Grid -->
+                <div class="space-y-4">
+                    <h3 class="text-xs font-tech uppercase tracking-widest text-gray-500 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-xs"></i> Semantic Grid Breakdown (5Ws)
+                    </h3>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="glass-card p-4.5 rounded-xl">
+                            <span class="text-[9px] font-tech text-gray-500 uppercase tracking-widest block mb-1">Entity (Who)</span>
+                            <span id="outWho" class="text-sm text-gray-200 font-medium">-</span>
+                        </div>
+                        <div class="glass-card p-4.5 rounded-xl">
+                            <span class="text-[9px] font-tech text-gray-500 uppercase tracking-widest block mb-1">Incident (What)</span>
+                            <span id="outWhat" class="text-sm text-gray-200 font-medium">-</span>
+                        </div>
+                        <div class="glass-card p-4.5 rounded-xl">
+                            <span class="text-[9px] font-tech text-gray-500 uppercase tracking-widest block mb-1">Timeline (When)</span>
+                            <span id="outWhen" class="text-sm text-gray-200 font-medium">-</span>
+                        </div>
+                        <div class="glass-card p-4.5 rounded-xl">
+                            <span class="text-[9px] font-tech text-gray-500 uppercase tracking-widest block mb-1">Geolocation (Where)</span>
+                            <span id="outWhere" class="text-sm text-gray-200 font-medium">-</span>
+                        </div>
+                        <div class="glass-card p-4.5 rounded-xl sm:col-span-2">
+                            <span class="text-[9px] font-tech text-gray-400 uppercase tracking-widest block mb-1">Contextual Vector (Why)</span>
+                            <span id="outWhy" class="text-sm text-gray-200 font-medium leading-relaxed">-</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        
+        <!-- Fine-tuned Footer -->
+        <footer class="mt-24 pt-6 border-t border-white/5 text-[10px] font-tech text-gray-600 flex justify-between tracking-widest">
+            <span>CORE NODE: CONNECTED</span>
+            <span>POWERED BY FLASK & GROQ COMPUTE</span>
+        </footer>
+    </div>
+
+    <!-- Core App Dashboard Driver Script -->
+    <script>
+        async function handleSummarize() {
+            const text = document.getElementById('articleText').value.trim();
+            const btn = document.getElementById('summarizeBtn');
+            const loading = document.getElementById('loading');
+            const output = document.getElementById('output');
+
+            if (!text || text.length < 100) {
+                alert('Analysis Rejected: The document payload does not meet the 100 character threshold.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.classList.add('opacity-30');
+            loading.classList.remove('hidden');
+            output.classList.add('hidden');
+
+            try {
+                const response = await fetch('/summarize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const resData = await response.json();
+
+                if (resData.success) {
+                    const data = resData.data;
+                    
+                    // Metadata Badges Ingestion
+                    document.getElementById('badgeCategory').innerText = (data.category || 'General').toUpperCase();
+                    document.getElementById('badgeReadingTime').innerText = `${data.reading_time || 30}s READ`;
+
+                    // Smart Elegant Colorization for Badges
+                    colorizeMetrics(data.sentiment, data.importance);
+
+                    // Headlines & Narrative Injector
+                    document.getElementById('outHeadline').innerText = data.headline;
+                    document.getElementById('outSummary').innerText = data.summary;
+
+                    // Key Highlights Node Generation
+                    const kpUl = document.getElementById('outKeyPoints');
+                    kpUl.innerHTML = '';
+                    if(data.key_points && Array.isArray(data.key_points)) {
+                        data.key_points.forEach((point, index) => {
+                            const li = document.createElement('li');
+                            li.className = "flex items-start gap-4 text-gray-300 font-sans";
+                            li.innerHTML = `<span class="font-tech text-[10px] text-gray-600 mt-1">0${index+1} //</span> <span>${point}</span>`;
+                            kpUl.appendChild(li);
+                        });
+                    }
+
+                    // Semantic Variables Allocation
+                    document.getElementById('outWho').innerText = data.who || '-';
+                    document.getElementById('outWhat').innerText = data.what || '-';
+                    document.getElementById('outWhen').innerText = data.when || '-';
+                    document.getElementById('outWhere').innerText = data.where || '-';
+                    document.getElementById('outWhy').innerText = data.why || '-';
+
+                    output.classList.remove('hidden');
+                } else {
+                    alert('Data Parsing Error: ' + resData.error);
+                }
+            } catch (error) {
+                alert('System Interrupt: Failed to cross-reference server node.');
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.classList.remove('opacity-30');
+                loading.classList.add('hidden');
+            }
+        }
+
+        function colorizeMetrics(sentiment, importance) {
+            const sentEl = document.getElementById('badgeSentiment');
+            const impEl = document.getElementById('badgeImportance');
+
+            sentEl.innerText = (sentiment || 'Neutral').toUpperCase();
+            impEl.innerText = (importance || 'Medium').toUpperCase();
+
+            // Muted, High-End Professional Palette
+            if(String(sentiment).toLowerCase().includes('neg')) {
+                sentEl.className = "text-sm font-bold font-tech text-red-400/90";
+            } else if(String(sentiment).toLowerCase().includes('pos')) {
+                sentEl.className = "text-sm font-bold font-tech text-emerald-400/90";
+            } else {
+                sentEl.className = "text-sm font-bold font-tech text-amber-400/90";
+            }
+
+            if(String(importance).toLowerCase().includes('break') || String(importance).toLowerCase().includes('high')) {
+                impEl.className = "text-sm font-bold font-tech text-orange-400/90";
+            } else {
+                impEl.className = "text-sm font-bold font-tech text-gray-400";
+            }
+        }
+
+        function copyBrief() {
+            const headline = document.getElementById('outHeadline').innerText;
+            const summary = document.getElementById('outSummary').innerText;
+            const fullText = `📌 *${headline}*\n\n📝 *Summary:*\n${summary}`;
+            
+            navigator.clipboard.writeText(fullText).then(() => {
+                const icon = document.getElementById('copyIcon');
+                icon.className = "fa-solid fa-check text-emerald-400";
+                setTimeout(() => {
+                    icon.className = "fa-regular fa-copy text-xs";
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
