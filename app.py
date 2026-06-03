@@ -1,14 +1,13 @@
-import os
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from groq import Groq
 import re
 import json
 from langdetect import detect
+import os
 
 app = Flask(__name__)
 CORS(app)
-
 
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
 
@@ -42,7 +41,7 @@ def summarize():
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             max_tokens=1024,
-            response_format={"type": "json_object"}, 
+            response_format={"type": "json_object"},
             messages=[
                 {
                     "role": "user",
@@ -73,7 +72,6 @@ Article:
         )
 
         response_text = response.choices[0].message.content.strip()
-        
         response_text = re.sub(r'^```json\s*', '', response_text)
         response_text = re.sub(r'\s*```$', '', response_text)
 
@@ -83,7 +81,5 @@ Article:
     except Exception as e:
         return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
 
-# 🌟 பிக்ஸ் 2: Render சர்வருக்கான போர்ட் (Port) செட்டிங்ஸ் மாற்றியாச்சு!
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=False)
