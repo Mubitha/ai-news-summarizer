@@ -1,3 +1,4 @@
+import os
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from groq import Groq
@@ -8,8 +9,9 @@ from langdetect import detect
 app = Flask(__name__)
 CORS(app)
 
-# Replace with your actual Groq API key
+
 client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -26,13 +28,11 @@ def summarize():
         return jsonify({'error': 'Article too short. Please paste a longer news article.'}), 400
 
     try:
-        # Detect language (For logging or future use, dynamic handling is inside prompt)
         try:
             lang = detect(article_text)
         except:
             lang = 'en'
 
-        # Dynamic System Instruction: AI-க்கு இன்புட் லாங்குவேஜ்லயே பதில் சொல்ல கட்டளையிடுகிறோம்!
         lang_instruction = (
             "IMPORTANT: You MUST detect the language of the provided article and respond "
             "with ALL fields in that SAME language only. Every single value must be in the detected language. "
@@ -42,7 +42,6 @@ def summarize():
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             max_tokens=1024,
-            # Enforcing strict JSON response from the model
             response_format={"type": "json_object"}, 
             messages=[
                 {
@@ -75,7 +74,6 @@ Article:
 
         response_text = response.choices[0].message.content.strip()
         
-        # Safe cleanup just in case, though response_format="json_object" usually handles it
         response_text = re.sub(r'^```json\s*', '', response_text)
         response_text = re.sub(r'\s*```$', '', response_text)
 
@@ -85,5 +83,7 @@ Article:
     except Exception as e:
         return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
 
+# 🌟 பிக்ஸ் 2: Render சர்வருக்கான போர்ட் (Port) செட்டிங்ஸ் மாற்றியாச்சு!
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
