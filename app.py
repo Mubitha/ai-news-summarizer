@@ -3,8 +3,10 @@ from flask_cors import CORS
 from groq import Groq
 import re
 import json
-from langdetect import detect
+from langdetect import detect, DetectorFactory
 import os
+
+DetectorFactory.seed = 0
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +20,11 @@ def index():
 @app.route('/summarize', methods=['POST'])
 def summarize():
     data = request.get_json()
+    
+    # Payload இல்லையென்றால் கிராஷ் ஆகாமல் இருக்க safe check
+    if not data or 'text' not in data:
+        return jsonify({'error': 'No text field found in request body'}), 400
+
     article_text = data.get('text', '').strip()
 
     if not article_text:
@@ -27,15 +34,17 @@ def summarize():
         return jsonify({'error': 'Article too short. Please paste a longer news article.'}), 400
 
     try:
+        # 2. Language Detection
         try:
             lang = detect(article_text)
-        except:
-            lang = 'en'
+        except Exception:
+            lang = 'en'  # ஏதேனும் எர்ரர் வந்தால் Default-ஆக English எடுத்துக்கொள்ளும்
 
+        # 3. Llama 3.3 Prompt Handover: கண்டறியப்பட்ட மொழியின் ISO குறியீட்டை நேரடியாக Prompt-ல் வழங்குகிறது
         lang_instruction = (
-            "IMPORTANT: You MUST detect the language of the provided article and respond "
-            "with ALL fields in that SAME language only. Every single value must be in the detected language. "
-            "Do not translate JSON keys, only translate the values."
+            f"IMPORTANT: The detected primary language code for this article is '{lang}'. "
+            f"You MUST write ALL field values in language code '{lang}'. "
+            "Do not translate JSON keys, ONLY write the string values in that language."
         )
 
         response = client.chat.completions.create(
@@ -72,14 +81,19 @@ Article:
         )
 
         response_text = response.choices[0].message.content.strip()
+        
+    ு
         response_text = re.sub(r'^```json\s*', '', response_text)
         response_text = re.sub(r'\s*```$', '', response_text)
 
         result = json.loads(response_text)
-        return jsonify({'success': True, 'data': result})
+        return jsonify({'success': True, 'detected_language': lang, 'data': result})
 
+    except json.JSONDecodeError:
+        return jsonify({'error': 'Failed to parse JSON response from LLM model'}), 500
     except Exception as e:
         return jsonify({'error': f'Analysis failed: {str(e)}'}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=False)
